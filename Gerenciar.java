@@ -5,14 +5,14 @@ public class Gerenciar {
     private static final int CAPACIDADE_FILA  = 10;
     private static final int CAPACIDADE_PILHA = 5;
 
-    private FilaImpressao     filaImpressao;
-    private PilhaReimpressao  pilhaReimpressao;
-    private MenuView          view;
+    private FilaImpressao filaImpressao;
+    private PilhaReimpressao pilhaReimpressao;
+    private MenuView view;
 
     public Gerenciar() {
-        this.filaImpressao    = new FilaImpressao(CAPACIDADE_FILA);
+        this.filaImpressao = new FilaImpressao(CAPACIDADE_FILA);
         this.pilhaReimpressao = new PilhaReimpressao(CAPACIDADE_PILHA);
-        this.view             = new MenuView();
+        this.view = new MenuView();
     }
 
     public void iniciar() {
@@ -32,14 +32,13 @@ public class Gerenciar {
             switch (opcao) {
                 case 1 -> adicionarDocumentoFila();
                 case 2 -> imprimirDocumentoFila();
-                case 3 -> consultarDocumentoFila();
+                case 3 -> consultarFila();
                 case 4 -> view.mostrarMensagem(filaImpressao.gerarRelatorio());
-                case 5 -> adicionarDocumentoPilha();
-                case 6 -> reimprimirDocumentoPilha();
-                case 7 -> consultarDocumentoPilha();
-                case 8 -> view.mostrarMensagem(pilhaReimpressao.gerarRelatorio());
-                case 9 -> carregarDocumentosDeArquivo();
-                case 0 -> { /* nada: saída será feita no iniciar() */ }
+                case 5 -> reimprimirDocumentoPilha();
+                case 6 -> consultarDocumentoPilha();
+                case 7 -> view.mostrarMensagem(pilhaReimpressao.gerarRelatorio());
+                case 8 -> carregarDocumentosDeArquivo();
+                case 0 -> { /* desloga sistema() */ }
                 default -> view.mostrarMensagem("Opção inválida! Tente novamente.");
             }
         } catch (RuntimeException e) {
@@ -54,13 +53,21 @@ public class Gerenciar {
         view.mostrarMensagem("Documento adicionado à fila: " + nomeArquivo);
     }
 
+    // documento impresso vai direto pra pilha de Reimpressão
     private void imprimirDocumentoFila() {
         Documento doc = filaImpressao.imprimirDocumento();
         view.mostrarMensagem("Impressão concluída: " + doc.getnomeArquivo());
         view.mostrarMensagem("Tempo de espera: " + doc.calcularTempoEspera() + " segundos");
+
+        try {
+            pilhaReimpressao.adicionarDocumento(doc); // Aqui está a mágica
+            view.mostrarMensagem("Documento adicionado automaticamente à pilha de reimpressão.");
+        } catch (RuntimeException e) {
+            view.mostrarMensagem("Erro ao adicionar à pilha: " + e.getMessage());
+        }
     }
 
-    private void consultarDocumentoFila() {
+    private void consultarFila() {
         String nome = view.lerInput("Nome do arquivo a consultar: ");
         int pos = filaImpressao.buscarDocumento(nome);
         if (pos != -1) {
@@ -70,13 +77,6 @@ public class Gerenciar {
         } else {
             view.mostrarMensagem("Documento não encontrado na fila.");
         }
-    }
-
-    private void adicionarDocumentoPilha() {
-        String nomeArquivo = view.lerInput("Nome do arquivo para reimpressão: ");
-        String usuario     = view.lerInput("Nome do usuário: ");
-        pilhaReimpressao.adicionarDocumento(new Documento(nomeArquivo, usuario));
-        view.mostrarMensagem("Documento adicionado à pilha: " + nomeArquivo);
     }
 
     private void reimprimirDocumentoPilha() {
