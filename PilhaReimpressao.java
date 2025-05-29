@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class PilhaReimpressao {
     private ArrayList<Documento> documentos;
-    private Pilha indicadorPilha;
+    private Pilha indiciePilha;
     private int capacidade;
     private int tamanho;
 
@@ -10,11 +10,11 @@ public class PilhaReimpressao {
         this.capacidade = capacidade;
         this.tamanho = 0;
         this.documentos = new ArrayList<>(capacidade);
-        this.indicadorPilha = new Pilha();
+        this.indiciePilha = new Pilha();
     }
 
     public boolean pilhaVazia() {
-        return indicadorPilha.pilhaVazia();
+        return indiciePilha.pilhaVazia();
     }
 
     public boolean pilhaCheia() {
@@ -26,7 +26,7 @@ public class PilhaReimpressao {
             throw new RuntimeException("Pilha de reimpressão cheia");
 
         documentos.add(doc);
-        indicadorPilha.push((char) tamanho);
+        indiciePilha.push((char) tamanho);
         tamanho++;
     }
 
@@ -34,7 +34,7 @@ public class PilhaReimpressao {
         if (pilhaVazia())
             throw new RuntimeException("Pilha de reimpressão vazia");
 
-        int indice = (int) indicadorPilha.pop();
+        int indice = (int) indiciePilha.pop();
         Documento doc = documentos.get(indice);
         tamanho--;
         return doc;
@@ -61,15 +61,15 @@ public class PilhaReimpressao {
         Pilha tempPilha = new Pilha();
         Pilha auxPilha = new Pilha();
 
-        while (!indicadorPilha.pilhaVazia()) {
-            char indice = indicadorPilha.pop();
+        while (!indiciePilha.pilhaVazia()) {
+            char indice = indiciePilha.pop();
             auxPilha.push(indice);
         }
 
         int posicao = 1;
         while (!auxPilha.pilhaVazia()) {
             char indice = auxPilha.pop();
-            indicadorPilha.push(indice);
+            indiciePilha.push(indice);
             tempPilha.push(indice);
             Documento doc = documentos.get((int) indice);
             sb.append(posicao++).append(". ").append(doc.toString()).append("\n");

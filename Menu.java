@@ -31,7 +31,7 @@ public class Menu {
         return scanner.nextLine();
     }
 
-    public void mostrarMensagem(String msg) {
+    public void enviarMensagem(String msg) {
         System.out.println(msg);
     }
 

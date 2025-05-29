@@ -27,7 +27,7 @@ public class Gerenciar {
             processarOpcao(opcao);
         } while (opcao != 0);
 
-        view.mostrarMensagem("Encerrando o sistema...");
+        view.enviarMensagem("Encerrando o sistema...");
         view.fechar();
     }
 
@@ -38,23 +38,23 @@ public class Gerenciar {
                 try {
                     imprimirDocumentoFila();
                 } catch (RuntimeException e) {
-                    view.mostrarMensagem("Erro ao imprimir: " + e.getMessage());
+                    view.enviarMensagem("Erro ao imprimir: " + e.getMessage());
                 }
             }
             case 3 -> consultarFila();
-            case 4 -> view.mostrarMensagem(filaImpressao.gerarRelatorio());
+            case 4 -> view.enviarMensagem(filaImpressao.gerarRelatorio());
             case 5 -> {
                 try {
                     reimprimirDocumentoPilha();
                 } catch (RuntimeException e) {
-                    view.mostrarMensagem("Erro ao reimprimir: " + e.getMessage());
+                    view.enviarMensagem("Erro ao reimprimir: " + e.getMessage());
                 }
             }
             case 6 -> consultarDocumentoPilha();
-            case 7 -> view.mostrarMensagem(pilhaReimpressao.gerarRelatorio());
+            case 7 -> view.enviarMensagem(pilhaReimpressao.gerarRelatorio());
             case 8 -> carregarDocumentosDeArquivo();
             case 0 -> {} // encerra
-            default -> view.mostrarMensagem("Opção inválida! Tente novamente.");
+            default -> view.enviarMensagem("Opção inválida! Tente novamente.");
         }
     }
 
@@ -62,19 +62,19 @@ public class Gerenciar {
         String nomeArquivo = view.lerInput("Nome do arquivo: ");
         String usuario = view.lerInput("Nome do usuário: ");
         filaImpressao.adicionarDocumento(new Documento(nomeArquivo, usuario));
-        view.mostrarMensagem("Documento adicionado à fila: " + nomeArquivo);
+        view.enviarMensagem("Documento adicionado à fila: " + nomeArquivo);
     }
 
     private void imprimirDocumentoFila() {
         Documento doc = filaImpressao.imprimirDocumento();
-        view.mostrarMensagem("Impressão concluída: " + doc.getnomeArquivo());
-        view.mostrarMensagem("Tempo de espera: " + doc.tempoEspera() + " segundos");
+        view.enviarMensagem("Impressão concluída: " + doc.getnomeArquivo());
+        view.enviarMensagem("Tempo de espera: " + doc.tempoEspera() + " segundos");
 
         try {
             pilhaReimpressao.adicionarDocumento(doc);
-            view.mostrarMensagem("Documento adicionado automaticamente à pilha de reimpressão.");
+            view.enviarMensagem("Documento adicionado automaticamente à pilha de reimpressão.");
         } catch (RuntimeException e) {
-            view.mostrarMensagem("Erro ao adicionar à pilha: " + e.getMessage());
+            view.enviarMensagem("Erro ao adicionar à pilha: " + e.getMessage());
         }
     }
 
@@ -83,25 +83,25 @@ public class Gerenciar {
         try {
             int pos = filaImpressao.buscarDocumento(nome);
             Documento doc = filaImpressao.consultarDocumento(nome);
-            view.mostrarMensagem("Documento na posição " + (pos + 1) + ":\n" + doc);
+            view.enviarMensagem("Documento na posição " + (pos + 1) + ":\n" + doc);
         } catch (RuntimeException e) {
-            view.mostrarMensagem("Documento não encontrado na fila.");
+            view.enviarMensagem("Documento não encontrado na fila.");
         }
     }
 
     private void reimprimirDocumentoPilha() {
         Documento doc = pilhaReimpressao.reimprimirDocumento();
-        view.mostrarMensagem("Reimpressão concluída: " + doc.getnomeArquivo());
-        view.mostrarMensagem("Tempo de espera: " + doc.tempoEspera() + " segundos");
+        view.enviarMensagem("Reimpressão concluída: " + doc.getnomeArquivo());
+        view.enviarMensagem("Tempo de espera: " + doc.tempoEspera() + " segundos");
     }
 
     private void consultarDocumentoPilha() {
-        String nome = view.lerInput("Nome do arquivo a consultar: ");
+        String nome = view.lerInput("Qual nome do arquivo? ");
         try {
             Documento doc = pilhaReimpressao.consultarDocumento(nome);
             exibirDocumento(doc);
         } catch (RuntimeException e) {
-            view.mostrarMensagem("Documento não encontrado na pilha.");
+            view.enviarMensagem("Documento não encontrado na pilha.");
         }
     }
 
@@ -110,11 +110,11 @@ public class Gerenciar {
         List<Documento> docs = LeitorArquivos.lerDocumentosDeArquivo(caminho);
 
         if (docs.isEmpty()) {
-            view.mostrarMensagem("Nenhum documento válido foi encontrado.");
+            view.enviarMensagem("Nenhum documento válido foi encontrado.");
             return;
         }
 
-        view.mostrarMensagem("Encontrados " + docs.size() + " documentos.");
+        view.enviarMensagem("Encontrados " + docs.size() + " documentos.");
         int adicionados = 0;
 
         for (Documento d : docs) {
@@ -122,19 +122,19 @@ public class Gerenciar {
                 filaImpressao.adicionarDocumento(d);
                 adicionados++;
             } catch (RuntimeException e) {
-                view.mostrarMensagem("Limite da fila atingido: " + e.getMessage());
+                view.enviarMensagem("Limite da fila atingido: " + e.getMessage());
                 break;
             }
         }
 
-        view.mostrarMensagem(adicionados + " documentos adicionados à fila com sucesso.");
+        view.enviarMensagem(adicionados + " documentos adicionados à fila com sucesso.");
     }
 
     private void exibirDocumento(Documento doc) {
         if (doc != null) {
-            view.mostrarMensagem(doc.toString());
+            view.enviarMensagem(doc.toString());
         } else {
-            view.mostrarMensagem("Documento não encontrado.");
+            view.enviarMensagem("Documento não encontrado.");
         }
     }
 }
