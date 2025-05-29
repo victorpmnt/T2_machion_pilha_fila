@@ -4,7 +4,7 @@ public class FilaImpressao {
     private Fila indicesFila;
     private ArrayList<Documento> documentos;
     private int capacidade;
-    private int proxId = 0;
+    private int prox = 0;
 
     public FilaImpressao(int capacidade) {
         this.capacidade = capacidade;
@@ -24,7 +24,7 @@ public class FilaImpressao {
         if (filaCheia())
             throw new RuntimeException("Fila cheia");
         documentos.add(doc);
-        indicesFila.enfileira(proxId++);
+        indicesFila.enfileira(prox++);
     }
 
     public Documento imprimirDocumento() {
@@ -35,33 +35,25 @@ public class FilaImpressao {
     }
 
     public int buscarDocumento(String nomeArquivo) {
-        if (filaVazia()) throw new DocumentoNaoEncontradoException(nomeArquivo);
-
         int posicao = 0;
-        for (int i = indicesFila.primeiro,
-                cont = 0; cont < indicesFila.ocupacao; cont++, i = indicesFila.proximaPosicao(i)) {
+        for (int i = indicesFila.primeiro, cont = 0;
+             cont < indicesFila.ocupacao;
+             cont++, i = indicesFila.proximaPosicao(i)) {
 
-            int indice = indicesFila.dados[i];
-            Documento doc = documentos.get(indice);
-
-            if (doc.getnomeArquivo().equals(nomeArquivo)) {
-                return posicao;
-            }
+            Documento doc = documentos.get(indicesFila.dados[i]);
+            if (doc.getnomeArquivo().equals(nomeArquivo)) return posicao;
             posicao++;
         }
         throw new DocumentoNaoEncontradoException(nomeArquivo);
     }
 
     public Documento consultarDocumento(String nomeArquivo) {
-        for (int i = indicesFila.primeiro,
-                cont = 0; cont < indicesFila.ocupacao; cont++, i = indicesFila.proximaPosicao(i)) {
+        for (int i = indicesFila.primeiro, cont = 0;
+             cont < indicesFila.ocupacao;
+             cont++, i = indicesFila.proximaPosicao(i)) {
 
-            int indice = indicesFila.dados[i];
-            Documento doc = documentos.get(indice);
-
-            if (doc.getnomeArquivo().equals(nomeArquivo)) {
-                return doc;
-            }
+            Documento doc = documentos.get(indicesFila.dados[i]);
+            if (doc.getnomeArquivo().equals(nomeArquivo)) return doc;
         }
         return null;
     }
@@ -76,13 +68,14 @@ public class FilaImpressao {
         sb.append("Documentos na fila:\n");
 
         int posicao = 1;
-        for (int i = indicesFila.primeiro,
-                cont = 0; cont < indicesFila.ocupacao; cont++, i = indicesFila.proximaPosicao(i)) {
+        for (int i = indicesFila.primeiro, cont = 0;
+             cont < indicesFila.ocupacao;
+             cont++, i = indicesFila.proximaPosicao(i)) {
 
-            int indice = indicesFila.dados[i];
-            sb.append(posicao++).append(". ").append(documentos.get(indice).toString()).append("\n");
-            posicao++;
+            Documento doc = documentos.get(indicesFila.dados[i]);
+            sb.append(posicao++).append(". ").append(doc).append("\n");
         }
+
         return sb.toString();
     }
 

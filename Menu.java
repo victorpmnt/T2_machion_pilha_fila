@@ -1,18 +1,18 @@
 import java.util.Scanner;
 
-public class MenuView {
+public class Menu {
     private Scanner scanner = new Scanner(System.in);
 
     public void mostrarMenu() {
-        System.out.println("\nSISTEMA DE GERENCIAMENTO DE IMPRESSÃO, digite o numero da operação desejada");
+        System.out.println("\nDigite o numero da operação desejada");
         System.out.println("1. Adicionar documento à fila de impressão");
         System.out.println("2. Imprimir documento da fila");
         System.out.println("3. Consultar documento na fila");
-        System.out.println("4. Exibir relatório da fila de impressão");
+        System.out.println("4. Exibir documentos da fila de impressão");
         System.out.println("5. Reimprimir documento da pilha");
         System.out.println("6. Consultar documento na pilha de reimpressão");
-        System.out.println("7. Exibir relatório da pilha de reimpressão");
-        System.out.println("8. Carregar documentos de arquivo texto");
+        System.out.println("7. Exibir documentos da pilha de reimpressão");
+        System.out.println("8. Inserir documento.txt");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
     }

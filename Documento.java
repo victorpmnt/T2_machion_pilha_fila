@@ -21,14 +21,13 @@ public class Documento {
     public LocalDateTime getmomentoSolicitado() {
         return momentoSolicitado;
     }
-    public long calcularTempoEspera() {
+    public long tempoEspera() {
         return ChronoUnit.SECONDS.between(momentoSolicitado, LocalDateTime.now());
     }
-
     
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return "Documento[" + nomeArquivo + ", usuário: " + nomeUsuario + 
                 ", solicitado: " + momentoSolicitado.format(formatter) + "]";
     }
